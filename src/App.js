@@ -2,6 +2,22 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import Amplify, { Auth } from 'aws-amplify';
+
+Amplify.configure({
+  Auth: {
+      region: 'ca-central-1',
+      userPoolWebClientId: '5rkq9dgoofr5lrnp0mqcslg6cl',
+      mandatorySignIn: true,
+      authenticationFlowType: 'USER_PASSWORD_AUTH'
+  }
+});
+
+// You can get the current config object
+const currentConfig = Auth.configure();
+
+const user = Auth.signIn('igor', '123456');
+
 function App() {
   return (
     <div className="App">
