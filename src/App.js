@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import Amplify, { Auth } from 'aws-amplify';
-import Login from './login/Login.jsx';
+import SignIn from './login/SignIn.jsx';
 
 Amplify.configure({
   Auth: {
@@ -37,7 +37,7 @@ function App() {
   
   return (
     <div>
-      <Login />
+      <SignIn />
     </div>
   );
 }
