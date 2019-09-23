@@ -12,7 +12,7 @@ class AuthClient
         }
         catch(err) {
             if(StringUtil.isEqual(err.code, "NotAuthorizedException")) {
-                
+                return err.message;
             }
         }
     }

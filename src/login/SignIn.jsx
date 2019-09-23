@@ -10,6 +10,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import ErrorIcon from '@material-ui/icons/Error';
 import AuthClient from 'AuthClient';
 
 function Copyright() {
@@ -32,10 +33,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -43,10 +40,15 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  errorMsg: {
+    display: 'flex',
+    alignItems: 'center',
+  }
 }));
 
 function SignIn(props) {
   const [inputs, setInputs] = useState({});
+  const [errMsg, setErrMsg] = useState('');
   const authClient = new AuthClient();
 
   const handleInputChange = (event) => {
@@ -57,10 +59,16 @@ function SignIn(props) {
   const classes = useStyles();
 
   async function DoLogin(e) {
+    setErrMsg('');
+    
     const username = inputs.username;
     const password = inputs.password;
 
-    await authClient.signIn(username, password);
+    const r = await authClient.signIn(username, password);
+
+    if(r !== "ok") {
+      setErrMsg(r);
+    }
   }
 
   return <Container component="main" maxWidth="xs">
@@ -99,6 +107,12 @@ function SignIn(props) {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          <Box bgcolor="error.main" color="error.contrastText" p={1} borderRadius={3}>
+            <span className={classes.errorMsg}>
+                <ErrorIcon />
+                Testing ...
+            </span>
+          </Box>
           <Button
             type="button"
             fullWidth
