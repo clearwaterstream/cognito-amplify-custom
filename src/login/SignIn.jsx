@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Amplify, { Auth } from 'aws-amplify';
+import AuthClient from 'AuthClient';
 
 function Copyright() {
   return <Typography variant="body2" color="textSecondary" align="center">
@@ -45,15 +45,23 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-async function DoLogin(e)
-{
-  const user = await Auth.signIn('igor', '1234567');
-
-  console.log(user);
-}
-
 function SignIn(props) {
+  const [inputs, setInputs] = useState({});
+  const authClient = new AuthClient();
+
+  const handleInputChange = (event) => {
+    event.persist();
+    setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
+  }
+  
   const classes = useStyles();
+
+  async function DoLogin(e) {
+    const username = inputs.username;
+    const password = inputs.password;
+
+    await authClient.signIn(username, password);
+  }
 
   return <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -73,6 +81,7 @@ function SignIn(props) {
             name="username"
             autoComplete="username"
             autoFocus
+            onChange={handleInputChange}
           />
           <TextField
             variant="outlined"
@@ -84,6 +93,7 @@ function SignIn(props) {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={handleInputChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

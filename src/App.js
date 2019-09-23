@@ -3,13 +3,13 @@ import logo from './logo.svg';
 import './App.css';
 
 import Amplify, { Auth } from 'aws-amplify';
-import SignIn from './login/SignIn.jsx';
+import SignIn from 'login/SignIn.jsx';
 
 Amplify.configure({
   Auth: {
       region: 'ca-central-1',
-      userPoolId: 'ca-central-1_Q3l8p8EpA',
-      userPoolWebClientId: '5rkq9dgoofr5lrnp0mqcslg6cl',
+      userPoolId: process.env.REACT_APP_COGNITO_userPoolId,
+      userPoolWebClientId: process.env.REACT_APP_COGNITO_userPoolWebClientId,
       mandatorySignIn: true,
       authenticationFlowType: 'USER_SRP_AUTH'
   }
@@ -20,6 +20,7 @@ const currentConfig = Auth.configure();
 
 function App() {  
   // Similar to componentDidMount and componentDidUpdate:
+  /*
   useEffect(() => {
     async function login() {
       try
@@ -34,6 +35,7 @@ function App() {
 
     login();
   });
+  */
   
   return (
     <div>
