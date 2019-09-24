@@ -1,9 +1,10 @@
 import Amplify, { Auth } from 'aws-amplify';
 import { StringUtil } from 'Util/Helpers';
+import { Hub } from 'aws-amplify';
 
 class AuthClient
 {
-    static init()
+    constructor()
     {
         Amplify.configure({
             Auth: {
@@ -15,7 +16,28 @@ class AuthClient
             }
         });
         
-        AuthClient.currentConfig = Auth.configure();
+        this.currentConfig = Auth.configure();
+
+        Hub.listen('CustomAuth', (data) => {
+            const { payload } = data;
+
+            this._handleEvent(payload);
+        });
+    }
+
+    start() { } // does nothing
+
+    _handleEvent(payload) {
+        const event = payload.event;
+
+        if(StringUtil.isEqual('init', event)) {
+            this._onInit(payload);
+            
+            return;
+        }
+    }
+
+    _onInit(payload) {
     }
     
     async signIn(username, password) {
@@ -45,4 +67,6 @@ class AuthClient
     }
 }
 
-export default AuthClient; // expose the HelloWorld component to other modules
+const instance = new AuthClient();
+
+export { instance as AuthClient }

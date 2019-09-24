@@ -7,12 +7,12 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
 
-import AuthClient from 'AuthClient';
+import { AuthClient } from 'AuthClient';
 import Home from 'Home';
 import SignIn from 'User/SignIn';
 import SignUp from 'User/SignUp';
 
-AuthClient.init();
+AuthClient.start();
 
 const useStyles = makeStyles(theme => ({
   '@global': {
