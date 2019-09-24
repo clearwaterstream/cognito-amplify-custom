@@ -10,9 +10,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import ErrorIcon from '@material-ui/icons/Error';
 import AuthClient from 'AuthClient';
-import { StringUtil } from 'Util/Helpers';
+import ErrorSnackbar from 'Components/ErrorSnackbar';
 
 function Copyright() {
   return <Typography variant="body2" color="textSecondary" align="center">
@@ -40,38 +39,8 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-  },
-  errorMsg: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  errorIcon: {
-    marginRight: theme.spacing(0.5)
   }
 }));
-
-const useStyles2 = makeStyles(theme => ({
-  errorMsg: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  errorIcon: {
-    marginRight: theme.spacing(0.5)
-  }
-}));
-
-function ErrorMessage(props) {
-  const classes = useStyles2();
-  
-  const errorMessage = props.errorMessage;
-  
-  if(StringUtil.isNullOrEmpty(errorMessage))
-    return null;
-
-  return <Box bgcolor="error.main" color="error.contrastText" p={1} borderRadius={3}>
-    <span className={classes.errorMsg}><ErrorIcon className={classes.errorIcon} />{errorMessage}</span>
-  </Box>
-}
 
 function SignIn(props) {
   const classes = useStyles();
@@ -134,7 +103,7 @@ function SignIn(props) {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <ErrorMessage errorMessage={errorMsg} />
+          <ErrorSnackbar errorMessage={errorMsg} />
           <Button
             type="button"
             fullWidth
