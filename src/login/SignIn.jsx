@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import ErrorIcon from '@material-ui/icons/Error';
 import AuthClient from 'AuthClient';
+import { StringUtil } from 'Util/Helpers';
 
 function Copyright() {
   return <Typography variant="body2" color="textSecondary" align="center">
@@ -43,23 +44,49 @@ const useStyles = makeStyles(theme => ({
   errorMsg: {
     display: 'flex',
     alignItems: 'center',
+  },
+  errorIcon: {
+    marginRight: theme.spacing(0.5)
   }
 }));
 
+const useStyles2 = makeStyles(theme => ({
+  errorMsg: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  errorIcon: {
+    marginRight: theme.spacing(0.5)
+  }
+}));
+
+function ErrorMessage(props) {
+  const classes = useStyles2();
+  
+  const errorMessage = props.errorMessage;
+  
+  if(StringUtil.isNullOrEmpty(errorMessage))
+    return null;
+
+  return <Box bgcolor="error.main" color="error.contrastText" p={1} borderRadius={3}>
+    <span className={classes.errorMsg}><ErrorIcon className={classes.errorIcon} />{errorMessage}</span>
+  </Box>
+}
+
 function SignIn(props) {
+  const classes = useStyles();
+  
   const [inputs, setInputs] = useState({});
-  const [errMsg, setErrMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const authClient = new AuthClient();
 
   const handleInputChange = (event) => {
     event.persist();
     setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
   }
-  
-  const classes = useStyles();
 
   async function DoLogin(e) {
-    setErrMsg('');
+    setErrorMsg('');
     
     const username = inputs.username;
     const password = inputs.password;
@@ -67,7 +94,7 @@ function SignIn(props) {
     const r = await authClient.signIn(username, password);
 
     if(r !== "ok") {
-      setErrMsg(r);
+      setErrorMsg(r);
     }
   }
 
@@ -107,12 +134,7 @@ function SignIn(props) {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Box bgcolor="error.main" color="error.contrastText" p={1} borderRadius={3}>
-            <span className={classes.errorMsg}>
-                <ErrorIcon />
-                Testing ...
-            </span>
-          </Box>
+          <ErrorMessage errorMessage={errorMsg} />
           <Button
             type="button"
             fullWidth
