@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.common.white,
     },
   },
+  logo: {
+    marginBottom: theme.spacing(0.5)
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -70,7 +73,7 @@ function SignIn(props) {
   return <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img src="logo-lawpro.png"></img>
+        <img src="mock_logo.png" className={classes.logo}></img>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
