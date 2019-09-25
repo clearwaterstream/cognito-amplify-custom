@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
 
 import { AuthClient } from 'AuthClient';
-import Home from 'Home';
+import AuthRouter from 'AuthRouter';
 import SignIn from 'User/SignIn';
 import SignUp from 'User/SignUp';
 
@@ -48,7 +48,7 @@ function App(children) {
       <div className={classes.paper}>
         <img src="mock_logo.png" className={classes.logo}></img>
         <Router>
-          <Route exact path="/" component={Home} />
+          <AuthRouter />
           <Route path="/login" component={SignIn} />
           <Route path="/signup" component={SignUp} />
         </Router>

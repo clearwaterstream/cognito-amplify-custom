@@ -18,36 +18,24 @@ class AuthClient
         });
         
         this.currentConfig = Auth.configure();
-
-        Hub.listen(Channels.customAuth, (data) => {
-            const { payload } = data;
-
-            this._handleEvent(payload);
-        });
     }
 
     start() { } // does nothing
 
-    _handleEvent(payload) {
-        const event = payload.event;
+    async getSessionStatus()
+    {
+        let status = '';
 
-        if(StringUtil.isEqual('init', event)) {
-            this._onInit(payload);
-            
-            return;
+        try {
+            const session = await Auth.currentSession();
+
+            status = 'sessionExists';
         }
-    }
+        catch(err) {
+            status = 'needToSignIn';
+        }
 
-    _onInit(payload) {
-        Auth.currentSession()
-        .then(session => {
-            const s = session;
-        })
-        .catch(err => {
-            
-            
-            // we do not have a user session, redirect to login page...
-        });
+        return status;
     }
     
     async signIn(username, password) {
