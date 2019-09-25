@@ -41,6 +41,8 @@ function SignIn(props) {
 
     if(r !== "ok") {
       setErrorMsg(r);
+
+      return;
     }
   }
 

@@ -5,6 +5,8 @@ import { Redirect, withRouter } from "react-router-dom";
 import { StringUtil } from 'Util/Helpers';
 import ErrorSnackbar from 'Components/ErrorSnackbar';
 import { AuthClient } from 'AuthClient';
+import { Hub } from 'aws-amplify';
+import Channels from 'Model/Events/Channels';
 
 const useStyles = makeStyles(theme => ({
   progress: {
@@ -26,6 +28,15 @@ function AuthRouter(props) {
     }
 
     getSession();
+
+    Hub.listen(Channels.customAuth, (data) => {
+      const { payload } = data;
+      const event = payload.event;
+
+      if(StringUtil.isEqual(event, 'signed_in')) {
+        setSessionStatus('sessionExists');
+      }
+    });
   }, []);
 
   let redirectUri = '';
@@ -52,7 +63,7 @@ function AuthRouter(props) {
 
   if(StringUtil.isEqual(sessionStatus, 'needToSignIn')) {
     return (
-      <Redirect to="login" />
+      <Redirect to={{ pathname: 'login', search: window.location.search }} />
     );
   }
 

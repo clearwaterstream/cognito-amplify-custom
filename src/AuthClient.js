@@ -18,6 +18,8 @@ class AuthClient
         });
         
         this.currentConfig = Auth.configure();
+
+        Auth.signOut();
     }
 
     start() { } // does nothing
@@ -45,6 +47,13 @@ class AuthClient
         try
         {
             const userInfo = await Auth.signIn(username, password);
+
+            Hub.dispatch(Channels.customAuth, 
+            { 
+                event: 'signed_in', 
+                data: {}, 
+                message: '' 
+            });
 
             return "ok";
         }
