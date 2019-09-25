@@ -1,6 +1,7 @@
 import Amplify, { Auth } from 'aws-amplify';
 import { StringUtil } from 'Util/Helpers';
 import { Hub } from 'aws-amplify';
+import Channels from 'Model/Events/Channels';
 
 class AuthClient
 {
@@ -18,7 +19,7 @@ class AuthClient
         
         this.currentConfig = Auth.configure();
 
-        Hub.listen('CustomAuth', (data) => {
+        Hub.listen(Channels.customAuth, (data) => {
             const { payload } = data;
 
             this._handleEvent(payload);
@@ -38,6 +39,15 @@ class AuthClient
     }
 
     _onInit(payload) {
+        Auth.currentSession()
+        .then(session => {
+            const s = session;
+        })
+        .catch(err => {
+            
+            
+            // we do not have a user session, redirect to login page...
+        });
     }
     
     async signIn(username, password) {

@@ -2,6 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Hub } from 'aws-amplify';
+import Channels from 'Model/Events/Channels';
+import AuthInitEvent from 'Model/Events/AuthInitEvent';
 
 const useStyles = makeStyles(theme => ({
   progress: {
@@ -14,13 +16,14 @@ function Home({ match, location }) {
 
   const params = new URLSearchParams(location.search);
 
-  const redirectUri = params.get('redirect_uri');
+  const eventData = new AuthInitEvent();
+  eventData.redirectUri = params.get('redirect_uri');
 
-  Hub.dispatch('CustomAuth', // auth channel is reserved
+  Hub.dispatch(Channels.customAuth, // auth channel is reserved
   { 
-        event: 'init', 
-        data: { redirectUri: redirectUri}, 
-        message:'' 
+        event: AuthInitEvent.eventName, 
+        data: eventData, 
+        message: '' 
   });
 
   return (
