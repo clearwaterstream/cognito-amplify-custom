@@ -72,6 +72,24 @@ class AuthClient
             }
         }
     }
+
+    signUp(userInfo) {
+        /*
+        Auth.signUp({
+            username,
+            password,
+            attributes: {
+                email,          // optional
+                phone_number,   // optional - E.164 number convention
+                // other custom attributes 
+            },
+            validationData: []  //optional
+            })
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        */
+       // todo
+    }
 }
 
 const instance = new AuthClient();
