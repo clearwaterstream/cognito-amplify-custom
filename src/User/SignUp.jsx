@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Link as RouterLink } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -54,13 +55,12 @@ const useStyles = makeStyles(theme => ({
 function SignUp(props) {
   const classes = useStyles();
 
+  const LoginLink = React.forwardRef((props, ref) => (
+    <RouterLink innerRef={ref} to={{ pathname: 'login', search: window.location.search }} {...props} />
+  ));
+
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+    <React.Fragment>
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
@@ -112,12 +112,6 @@ function SignUp(props) {
                 autoComplete="current-password"
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -130,17 +124,13 @@ function SignUp(props) {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="login" variant="body2">
+              <Link component={LoginLink} variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
         </form>
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+      </React.Fragment>
   );
 }
 

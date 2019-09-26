@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { AuthClient } from 'AuthClient';
 import ErrorSnackbar from 'Components/ErrorSnackbar';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -45,6 +46,14 @@ function SignIn(props) {
       return;
     }
   }
+
+  const SignUpLink = React.forwardRef((props, ref) => (
+    <RouterLink innerRef={ref} to={{ pathname: 'signup', search: window.location.search }} {...props} />
+  ));
+
+  const ForgotPasswordLink = React.forwardRef((props, ref) => (
+    <RouterLink innerRef={ref} to={{ pathname: 'forgotPassword', search: window.location.search }} {...props} />
+  ));
 
   return (
     <React.Fragment>
@@ -93,12 +102,12 @@ function SignIn(props) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="forgotPassword" variant="body2">
+              <Link component={ForgotPasswordLink} variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="signup" variant="body2">
+              <Link component={SignUpLink} variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
