@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import MaskedInput from 'react-text-mask';
+import { FormControl, InputLabel, Input, OutlinedInput } from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -43,14 +45,36 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  countryList: {
+    ...theme.typography.body1,
+  },
 }));
 
 function SignUp(props) {
   const classes = useStyles();
 
+  const { value, defaultCountry, onChange } = props;
+
   const LoginLink = React.forwardRef((props, ref) => (
     <RouterLink innerRef={ref} to={{ pathname: 'login', search: window.location.search }} {...props} />
   ));
+
+  function TextMaskCustom(props) {
+    const { inputRef, ...other } = props;
+  
+    return (
+      <MaskedInput
+        {...other}
+        ref={ref => {
+          inputRef(ref ? ref.inputElement : null);
+        }}
+        mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+        placeholderChar={'\u2000'}
+        guide={false}
+        showMask
+      />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -103,6 +127,21 @@ function SignUp(props) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="phone"
+                label="Phone"
+                type="tel"
+                id="phone"
+                autoComplete="tel"
+                InputProps={{
+                  inputComponent: TextMaskCustom,
+                }}
               />
             </Grid>
           </Grid>
