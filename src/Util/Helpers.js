@@ -28,6 +28,16 @@ class StringUtil
         if(text === '')
             return true;
     }
+
+    static ExtractDigits(text) {
+        if (!text) {
+            return text;
+          }
+        
+        const cleanValue = text.replace(/\./g, "");
+
+        return cleanValue;
+    }
 }
 
 export {StringUtil};
