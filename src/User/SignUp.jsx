@@ -33,7 +33,9 @@ function SignUp(props) {
     setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
   }
 
-  function DoSignUp(e) {
+  function DoSignUp(e) {    
+    
+    
     AuthClient.signUp(inputs);
   }
 

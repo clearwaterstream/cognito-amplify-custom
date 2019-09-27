@@ -74,6 +74,8 @@ class AuthClient
     }
 
     signUp(userInfo) {
+        if(userInfo.)
+        
         try
         {
             Auth.signUp({
@@ -83,7 +85,7 @@ class AuthClient
                     email: userInfo.email,
                     given_name: userInfo.firstName,
                     family_name: userInfo.lastName,
-                    phone_number: '+14165671572' //userInfo.phone
+                    phone_number: '4165671572' //userInfo.phone
                 },
                 validationData: []  //optional
             })
