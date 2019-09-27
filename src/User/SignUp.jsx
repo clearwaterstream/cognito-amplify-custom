@@ -33,19 +33,8 @@ function SignUp(props) {
     setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
   }
 
-  async function DoSignUp(e) {
-    //setErrorMsg('');
-    
-    const username = inputs.username;
-    const password = inputs.password;
-
-    const r = await AuthClient.signIn(username, password);
-
-    if(r !== "ok") {
-      //setErrorMsg(r);
-
-      return;
-    }
+  function DoSignUp(e) {
+    AuthClient.signUp(inputs);
   }
 
   return (
@@ -135,7 +124,7 @@ function SignUp(props) {
             </Grid>
           </Grid>
           <Button
-            type="submit"
+            type="button"
             fullWidth
             variant="contained"
             color="primary"

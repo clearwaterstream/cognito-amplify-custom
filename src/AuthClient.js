@@ -74,21 +74,29 @@ class AuthClient
     }
 
     signUp(userInfo) {
-        /*
-        Auth.signUp({
-            username,
-            password,
-            attributes: {
-                email,          // optional
-                phone_number,   // optional - E.164 number convention
-                // other custom attributes 
-            },
-            validationData: []  //optional
+        try
+        {
+            Auth.signUp({
+                username: userInfo.username,
+                password: userInfo.password,
+                attributes: {
+                    email: userInfo.email,
+                    given_name: userInfo.firstName,
+                    family_name: userInfo.lastName,
+                    phone_number: '+14165671572' //userInfo.phone
+                },
+                validationData: []  //optional
             })
-            .then(data => console.log(data))
-            .catch(err => console.log(err));
-        */
-       // todo
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => {
+                console.log('hello ' + err);
+            });
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
 }
 
