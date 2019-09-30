@@ -35,9 +35,9 @@ function SignIn(props) {
   async function DoLogin(e) {
     setErrorMsg('');
 
-    const params = { username, password } = inputs;
+    const { username, password } = inputs;
 
-    const r = await AuthClient.signIn(params.username, params.password);
+    const r = await AuthClient.signIn(username, password);
 
     if(r !== "ok") {
       setErrorMsg(r);

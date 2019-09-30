@@ -1,4 +1,5 @@
 import Amplify, { Auth } from 'aws-amplify';
+import { AuthErrorTypes } from 'aws-amplify/src/Common/types/Auth'
 import { StringUtil } from 'Util/Helpers';
 import { Hub } from 'aws-amplify';
 import Channels from 'Model/Events/Channels';
@@ -20,6 +21,8 @@ class AuthClient
         this.currentConfig = Auth.configure();
 
         Auth.signOut();
+
+        const x = AuthErrorTypes.EmptyUsername;
     }
 
     start() { } // does nothing
@@ -73,9 +76,8 @@ class AuthClient
         }
     }
 
-    signUp(userInfo) {
-        if(userInfo.)
-        
+    signUp(userInfo, cb)
+    {       
         try
         {
             Auth.signUp({
@@ -90,14 +92,20 @@ class AuthClient
                 validationData: []  //optional
             })
             .then(data => {
-                console.log(data);
+                cb();
             })
             .catch(err => {
-                console.log('hello ' + err);
+                if(StringUtil.isEqual(err.name, "AuthError")) {
+                    cb(err.message);
+
+                    return;
+                }
+
+                cb(err);
             });
         }
         catch(err) {
-            console.log(err);
+            cb(err);
         }
     }
 }

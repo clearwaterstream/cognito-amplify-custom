@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import {Button, Box, TextField, Link, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import PhoneMask from 'Components/PhoneMask';
+import ErrorSnackbar from 'Components/ErrorSnackbar';
 import { AuthClient } from 'AuthClient';
+import { StringUtil } from 'Util/Helpers';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -23,6 +21,7 @@ function SignUp(props) {
   const classes = useStyles();
 
   const [inputs, setInputs] = useState({});
+  const [errorMsg, setErrorMsg] = useState('');
 
   const LoginLink = React.forwardRef((props, ref) => (
     <RouterLink innerRef={ref} to={{ pathname: 'login', search: window.location.search }} {...props} />
@@ -33,10 +32,26 @@ function SignUp(props) {
     setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
   }
 
+  function DoSignUpCb(err) {
+    if(!StringUtil.isNullOrEmpty(err)) {
+      setErrorMsg(err);
+    }
+  }
+
   function DoSignUp(e) {    
+    setErrorMsg('');
     
-    
-    AuthClient.signUp(inputs);
+    AuthClient.signUp(inputs, DoSignUpCb);
+  }
+
+  function ErrorBlock() {
+    if(StringUtil.isNullOrEmpty(errorMsg))
+      return null;
+
+      return (
+      <Grid item xs={12}>
+        <ErrorSnackbar errorMessage={errorMsg} />
+      </Grid>);
   }
 
   return (
@@ -124,6 +139,7 @@ function SignUp(props) {
                 onChange={handleInputChange}
               />
             </Grid>
+            <ErrorBlock />
           </Grid>
           <Button
             type="button"
