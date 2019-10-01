@@ -25,6 +25,9 @@ class AuthErrorMapper
 
                 return friendlyError;
             }
+            else if(StringUtil.isEqual(errMsg, 'Attribute value for given_name must not be null')) {
+                friendlyError = '';
+            }
         }
 
         return friendlyError;
