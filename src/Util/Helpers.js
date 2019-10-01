@@ -17,6 +17,20 @@ class StringUtil
         return false;
     }
 
+    static contains(text, other) {
+        if(this.isNullOrEmpty(text))
+            return false;
+
+        if((typeof text === 'string' || text instanceof String) && (typeof other === 'string' || other instanceof String))
+        {
+            const r = text.toLowerCase().includes(other.toLowerCase());
+
+            return r;
+        }
+        
+        return false;
+    }
+
     static isNullOrEmpty(text)
     {
         if(text === undefined)

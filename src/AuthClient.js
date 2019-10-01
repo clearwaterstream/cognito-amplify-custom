@@ -1,8 +1,8 @@
 import Amplify, { Auth } from 'aws-amplify';
-import { AuthErrorTypes } from 'aws-amplify/src/Common/types/Auth'
 import { StringUtil } from 'Util/Helpers';
 import { Hub } from 'aws-amplify';
 import Channels from 'Model/Events/Channels';
+import { AuthErrorMapper } from 'Util/Auth/AuthErrorMapper';
 
 class AuthClient
 {
@@ -21,8 +21,6 @@ class AuthClient
         this.currentConfig = Auth.configure();
 
         Auth.signOut();
-
-        const x = AuthErrorTypes.EmptyUsername;
     }
 
     start() { } // does nothing
@@ -95,17 +93,19 @@ class AuthClient
                 cb();
             })
             .catch(err => {
-                if(StringUtil.isEqual(err.name, "AuthError")) {
-                    cb(err.message);
+                const friendlyError = AuthErrorMapper.mapError(err);
 
-                    return;
-                }
-
-                cb(err);
+                cb(friendlyError);
+    
+                return;
             });
         }
         catch(err) {
-            cb(err);
+            const friendlyError = AuthErrorMapper.mapError(err);
+
+            cb(friendlyError);
+
+            return;
         }
     }
 }
