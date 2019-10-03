@@ -17,6 +17,24 @@ class StringUtil
         return false;
     }
 
+    static isEither(text, ...args) {
+        if(this.isNullOrEmpty(text)) {
+            return false;
+        }
+        
+        if(args === null || typeof args === typeof undefined) {
+            return false;
+        }
+
+        for(var v of args) {
+            if(this.isEqual(text, v)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     static contains(text, other) {
         if(this.isNullOrEmpty(text))
             return false;
@@ -43,12 +61,12 @@ class StringUtil
             return true;
     }
 
-    static ExtractDigits(text) {
-        if (!text) {
+    static extractDigits(text) {
+        if (this.isNullOrEmpty(text)) {
             return text;
           }
         
-        const cleanValue = text.replace(/\./g, "");
+        const cleanValue = text.replace(/[^\d]/g, "");
 
         return cleanValue;
     }

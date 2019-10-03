@@ -4,7 +4,15 @@ import AppErrors from 'Model/AppErrors';
 
 class AuthErrorMapper
 {
+    errorMapByMsg = {};
+    
     constructor() {
+        this.errorMapByMsg["Attribute value for given_name must not be null"] = AppErrors.first_name_empty;
+        this.errorMapByMsg["Attribute value for family_name must not be null"] = AppErrors.last_name_empty;
+        this.errorMapByMsg["Attribute value for email must not be null"] = AppErrors.email_empty;
+        this.errorMapByMsg["Attributes did not conform to the schema: phone_number: The attribute is required"] = AppErrors.phone_empty;
+        this.errorMapByMsg["Attribute value for phone_number must not be null"] = AppErrors.phone_empty;
+        this.errorMapByMsg["Invalid phone number format."] = AppErrors.phone_invalid_format;
     }
     
     mapError(err) {
@@ -14,20 +22,33 @@ class AuthErrorMapper
             return friendlyError;
         }
 
-        if(StringUtil.isEqual(err.name, "AuthError")) {
+        if(StringUtil.isEither(err.name, "AuthError", "UsernameExistsException")) {
             return err.message; // use the error from the lib
         }
         else if(StringUtil.isEqual(err.name, "InvalidParameterException")) {
-            const errMsg = err.message;
+            let errMsg = err.message;
 
-            if(StringUtil.contains(errMsg, "Value at 'password' failed")) {
-                friendlyError = I18n.get(AppErrors.auth_weak_password);
+            if(!StringUtil.isNullOrEmpty(errMsg)) {
+                errMsg = errMsg.trimEnd();
+            }
 
+            let betterErrorMsg;
+
+            if(StringUtil.contains(errMsg, "Value at 'password' failed to satisfy constraint")) {
+                betterErrorMsg = AppErrors.auth_weak_password;
+            }
+
+            if(StringUtil.isNullOrEmpty(betterErrorMsg)) {                
+                betterErrorMsg = this.errorMapByMsg[errMsg];
+            }
+
+            if(StringUtil.isNullOrEmpty(betterErrorMsg)) {
                 return friendlyError;
             }
-            else if(StringUtil.isEqual(errMsg, 'Attribute value for given_name must not be null')) {
-                friendlyError = '';
-            }
+            
+            friendlyError = I18n.get(betterErrorMsg);
+
+            return friendlyError;
         }
 
         return friendlyError;

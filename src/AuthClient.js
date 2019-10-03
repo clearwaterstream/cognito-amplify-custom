@@ -3,9 +3,12 @@ import { StringUtil } from 'Util/Helpers';
 import { Hub } from 'aws-amplify';
 import Channels from 'Model/Events/Channels';
 import { AuthErrorMapper } from 'Util/Auth/AuthErrorMapper';
+import PhoneFormatter from 'Util/Formatters/PhoneFormatter';
 
 class AuthClient
 {
+    currentConfig;
+    
     constructor()
     {
         Amplify.configure({
@@ -78,6 +81,8 @@ class AuthClient
     {       
         try
         {
+            const phoneNum = PhoneFormatter.formatPhoneE164(userInfo.phone);
+            
             Auth.signUp({
                 username: userInfo.username,
                 password: userInfo.password,
@@ -85,7 +90,7 @@ class AuthClient
                     email: userInfo.email,
                     given_name: userInfo.firstName,
                     family_name: userInfo.lastName,
-                    phone_number: '4165671572' //userInfo.phone
+                    phone_number: phoneNum
                 },
                 validationData: []  //optional
             })

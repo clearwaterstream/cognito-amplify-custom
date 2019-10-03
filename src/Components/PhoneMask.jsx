@@ -3,6 +3,10 @@ import MaskedInput from 'react-text-mask';
 
 function PhoneMask(props) {
     const { inputRef, ...other } = props;
+
+    const handleInputChange = (event) => {
+      props.onChange(event);
+    }
   
     return (
       <MaskedInput
@@ -14,6 +18,7 @@ function PhoneMask(props) {
         placeholderChar={'\u2000'}
         guide={false}
         showMask
+        onChange={props.onChange}
       />
     );
 }
