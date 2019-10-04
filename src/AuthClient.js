@@ -94,13 +94,16 @@ class AuthClient
                 },
                 validationData: []  //optional
             })
-            .then(data => {
-                cb();
+            .then(data => {            
+                cb({
+                    userInfo: userInfo,
+                    userConfirmed: data.userConfirmed
+                });
             })
             .catch(err => {
                 const friendlyError = AuthErrorMapper.mapError(err);
 
-                cb(friendlyError);
+                cb({ errorMessage: friendlyError });
     
                 return;
             });
@@ -108,7 +111,9 @@ class AuthClient
         catch(err) {
             const friendlyError = AuthErrorMapper.mapError(err);
 
-            cb(friendlyError);
+
+
+            cb({ errorMessage: friendlyError });
 
             return;
         }

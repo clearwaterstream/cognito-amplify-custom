@@ -32,9 +32,21 @@ function SignUp(props) {
     setInputs(inputs => ({...inputs, [event.target.name]: event.target.value}));
   }
 
-  function DoSignUpCb(err) {
+  function DoSignUpCb(result) {
+    let err;
+
+    if(typeof result !== typeof undefined) {
+      err = result.errorMessage;
+    }
+    
     if(!StringUtil.isNullOrEmpty(err)) {
       setErrorMsg(err);
+
+      return;
+    }
+
+    if(result.userConfirmed === false) {
+      
     }
   }
 

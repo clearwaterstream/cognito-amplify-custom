@@ -13,6 +13,7 @@ class AuthErrorMapper
         this.errorMapByMsg["Attributes did not conform to the schema: phone_number: The attribute is required"] = AppErrors.phone_empty;
         this.errorMapByMsg["Attribute value for phone_number must not be null"] = AppErrors.phone_empty;
         this.errorMapByMsg["Invalid phone number format."] = AppErrors.phone_invalid_format;
+        this.errorMapByMsg["Invalid email address format."] = AppErrors.email_invalid_format;
     }
     
     mapError(err) {
@@ -34,7 +35,10 @@ class AuthErrorMapper
 
             let betterErrorMsg;
 
-            if(StringUtil.contains(errMsg, "Value at 'password' failed to satisfy constraint")) {
+            if(StringUtil.contains(errMsg, "Value at 'username' failed to satisfy constraint")) {
+                betterErrorMsg = AppErrors.auth_weak_password;
+            }
+            else if(StringUtil.contains(errMsg, "Value at 'password' failed to satisfy constraint")) {
                 betterErrorMsg = AppErrors.auth_weak_password;
             }
 
